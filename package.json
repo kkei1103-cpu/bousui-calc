@@ -1,0 +1,12 @@
+{
+  "name": "kids-news-seo",
+  "version": "2.0.0",
+  "scripts": {
+    "generate": "node scripts/generate-news.js",
+    "deploy": "netlify deploy --prod --dir=public"
+  },
+  "dependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "engines": { "node": ">=20" }
+}
