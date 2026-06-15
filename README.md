@@ -26,15 +26,11 @@
 必要缶数  = ceil(必要量 ÷ 荷姿kg/缶)
 ```
 
-## デプロイ
+## 公開（任意）
 
-`public/` を静的ホスティング（Netlify等）に上げるだけです。
+API・ビルド・サーバーは不要です。`public/index.html` をブラウザで開けばそのまま使えます。
 
-```
-npm run deploy   # netlify deploy --prod --dir=public
-```
-
-`main` ブランチへの push で `.github/workflows/deploy.yml` が Netlify に自動デプロイします（要 `NETLIFY_AUTH_TOKEN` / `NETLIFY_SITE_ID` シークレット）。
+Webで公開したい場合は、`public/` フォルダを任意の静的ホスティング（Netlify／GitHub Pages／社内サーバー等）にそのまま置くだけです。
 
 ---
 
