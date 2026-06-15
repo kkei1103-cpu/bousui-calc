@@ -1,8 +1,8 @@
 {
-  "name": "kids-news-seo",
-  "version": "2.0.0",
+  "name": "urethane-bousui-calc",
+  "version": "1.0.0",
+  "description": "田島ルーフィング GO-JIN／オルタックシリーズ ウレタン防水 缶数計算ツール",
   "scripts": {
-    "generate": "node scripts/generate-news.js",
     "deploy": "netlify deploy --prod --dir=public"
   },
   "dependencies": {
