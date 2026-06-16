@@ -4,7 +4,7 @@
 
 ## 使い方
 
-`public/index.html` をブラウザで開くだけ（ビルド不要・オフライン可）。スマホでもPCでも動きます。
+`docs/index.html` をブラウザで開くだけ（ビルド不要・オフライン可）。スマホでもPCでも動きます。
 
 1. **製品シリーズと工法** を選ぶ（オルタックエース／GO-JIN、密着・通気緩衝など）
 2. **数量を入力** — 平場㎡／立上り㎡／側溝m（側溝は「長さ×展開幅」で面積換算）を必要な分だけ
@@ -26,11 +26,18 @@
 必要缶数  = ceil(必要量 ÷ 荷姿kg/缶)
 ```
 
-## 公開（任意）
+## 公開（GitHub Pages）
 
-API・ビルド・サーバーは不要です。`public/index.html` をブラウザで開けばそのまま使えます。
+API・ビルド・サーバーは不要です。`docs/index.html` をブラウザで開けばそのまま使えます。
 
-Webで公開したい場合は、`public/` フォルダを任意の静的ホスティング（Netlify／GitHub Pages／社内サーバー等）にそのまま置くだけです。
+Webで公開する場合は **GitHub Pages** が簡単です：
+
+1. このPRを `main` にマージ
+2. リポジトリの **Settings → Pages** を開く
+3. Source を「**Deploy from a branch**」、Branch を「**main**」／フォルダ「**/docs**」に設定して Save
+4. 数分後、公開URL **https://kkei1103-cpu.github.io/kids-news/** で表示されます
+
+`docs/` フォルダを任意の静的ホスティング（Netlify／社内サーバー等）に置いても動きます。
 
 ---
 
