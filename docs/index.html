@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ウレタン防水 缶数計算｜田島 GO-JIN・オルタックシリーズ</title>
+<meta name="description" content="田島ルーフィングのウレタン塗膜防水「GO-JIN（ゴウジン）」「オルタックエース」シリーズの必要缶数を、平場の平米数または側溝のメーター数から自動計算。プライマー・主材・トップコートの缶数とロスを一括算出。">
+<style>
+  :root{
+    --accent:#1565C0;--accent2:#0D47A1;--ok:#2E7D32;--warn:#B26A00;
+    --bg:#eef1f5;--card:#fff;--text:#1a1f2b;--muted:#5b6472;--border:#dce0e6;
+    --chip:#eef4ff;--r:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+  header{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;padding:16px 16px 14px}
+  header h1{font-size:18px;font-weight:800;letter-spacing:.3px}
+  header p{font-size:12px;opacity:.92;margin-top:3px}
+  main{max-width:760px;margin:0 auto;padding:14px 12px 60px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .card h2{font-size:14px;font-weight:800;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .card h2 .n{background:var(--accent);color:#fff;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 4px}
+  label:first-of-type{margin-top:0}
+  select,input[type=number]{width:100%;font-size:16px;font-family:inherit;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:#fbfcfe;color:var(--text)}
+  select:focus,input:focus{outline:none;border-color:var(--accent);background:#fff}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row>div{flex:1;min-width:130px}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg button{flex:1;min-width:120px;font-family:inherit;font-size:13px;font-weight:700;padding:11px 8px;border:1.5px solid var(--border);background:#fff;color:var(--muted);border-radius:10px;cursor:pointer;transition:.12s}
+  .seg button.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(21,101,192,.25)}
+  .hint{font-size:11px;color:var(--muted);margin-top:4px}
+  .disclaimer{background:#fff8ec;border:1px solid #f0d9a8;border-radius:10px;padding:10px 12px;font-size:12px;color:var(--warn);margin-bottom:14px}
+  .disclaimer b{color:#8a5200}
+  /* result */
+  #result table{width:100%;border-collapse:collapse;font-size:13px}
+  #result th,#result td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--border)}
+  #result th{font-size:11px;color:var(--muted);font-weight:700;border-bottom:1.5px solid var(--border)}
+  #result td.mat,#result th.mat{text-align:left;font-weight:700}
+  #result td.cans{font-weight:800;color:var(--accent2);font-size:15px}
+  #result tr.tot td{border-top:2px solid var(--accent);border-bottom:none;padding-top:10px;font-weight:800}
+  .bigcans{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .bigcans .b{flex:1;min-width:150px;background:linear-gradient(135deg,#f3f8ff,#e8f1ff);border:1px solid #cfe0f7;border-radius:11px;padding:12px}
+  .bigcans .b .lab{font-size:11px;color:var(--muted);font-weight:700}
+  .bigcans .b .v{font-size:24px;font-weight:900;color:var(--accent2);line-height:1.2;margin-top:2px}
+  .bigcans .b .v small{font-size:13px;font-weight:700;color:var(--muted)}
+  /* coefficient editor */
+  details{margin-top:4px}
+  summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent);padding:8px 0;user-select:none}
+  .coef-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+  .coef-table th,.coef-table td{padding:5px 4px;border-bottom:1px solid var(--border);text-align:center}
+  .coef-table th{font-size:10px;color:var(--muted)}
+  .coef-table td.cn{text-align:left;font-weight:700}
+  .coef-table input{width:100%;font-size:14px;padding:6px 4px;text-align:right;border:1px solid var(--border);border-radius:6px;background:#fbfcfe}
+  .coef-table td.cn input{text-align:left;font-weight:700}
+  .btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btns button{font-family:inherit;font-size:12px;font-weight:700;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer}
+  .btns button.add{color:var(--accent);border-color:var(--accent)}
+  .btns button.reset{color:#c0392b;border-color:#e6b0aa}
+  .del{cursor:pointer;color:#c0392b;font-weight:900;font-size:16px;background:none;border:none;padding:0 4px}
+  footer{text-align:center;font-size:11px;color:var(--muted);padding:0 16px 30px}
+  footer a{color:var(--accent)}
+  .note{font-size:11px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛡️ ウレタン防水 缶数計算ツール</h1>
+  <p>田島ルーフィング GO-JIN（ゴウジン）／オルタックシリーズ ｜ 平場㎡・側溝mから必要缶数を自動算出</p>
+</header>
+
+<main>
+  <div class="disclaimer">
+    ⚠️ <b>使用量(kg/㎡)はメーカー公開カタログを参考にした初期値です。</b>工法・仕様書・下地状態で実際の数量は変わります。実際の発注前に必ず該当工法の <b>田島ルーフィング仕様書／積算資料</b> で数値をご確認ください。係数は「使用量の設定」で自由に編集でき、ブラウザに保存されます。
+  </div>
+
+  <!-- 1. 製品・工法 -->
+  <div class="card">
+    <h2><span class="n">1</span>製品シリーズと工法</h2>
+    <label>製品シリーズ</label>
+    <select id="series"></select>
+    <label>工法</label>
+    <select id="method"></select>
+    <div class="hint" id="seriesNote"></div>
+  </div>
+
+  <!-- 2. 入力 -->
+  <div class="card">
+    <h2><span class="n">2</span>数量を入力</h2>
+    <label>計算する箇所（複数選択可）</label>
+    <div class="seg" id="modeSeg">
+      <button data-mode="hiraba" class="on">平場（㎡）</button>
+      <button data-mode="tachiagari">立上り（㎡）</button>
+      <button data-mode="sokko">側溝（m）</button>
+    </div>
+
+    <div id="in-hiraba" class="inblock">
+      <label>平場面積（㎡）</label>
+      <input type="number" id="hiraba" inputmode="decimal" min="0" step="0.1" placeholder="例：80">
+    </div>
+
+    <div id="in-tachiagari" class="inblock" style="display:none">
+      <label>立上り面積（㎡）</label>
+      <input type="number" id="tachiagari" inputmode="decimal" min="0" step="0.1" placeholder="例：25">
+      <div class="hint">立上り高さ × 周長で面積を入力。係数は「立上り/側溝」列を使用します。</div>
+    </div>
+
+    <div id="in-sokko" class="inblock" style="display:none">
+      <div class="row">
+        <div>
+          <label>側溝の長さ（m）</label>
+          <input type="number" id="sokko" inputmode="decimal" min="0" step="0.1" placeholder="例：30">
+        </div>
+        <div>
+          <label>側溝の展開幅（m）</label>
+          <input type="number" id="sokkoW" inputmode="decimal" min="0" step="0.05" value="0.6">
+        </div>
+      </div>
+      <div class="hint">側溝面積 ＝ 長さ × 展開幅（断面を開いた幅）。U字溝なら底＋両側壁の合計幅を入力。係数は「立上り/側溝」列を使用します。</div>
+    </div>
+
+    <label style="margin-top:14px">ロス率（％）<span class="hint" style="display:inline;margin:0 0 0 4px">— 端部・ダレ・調合ロスの割増</span></label>
+    <input type="number" id="loss" inputmode="decimal" min="0" step="1" value="5">
+  </div>
+
+  <!-- 3. 結果 -->
+  <div class="card">
+    <h2><span class="n">3</span>必要缶数（自動計算）</h2>
+    <div class="bigcans" id="bigcans"></div>
+    <div id="result"></div>
+    <div class="note" id="areaNote"></div>
+  </div>
+
+  <!-- 4. 係数編集 -->
+  <div class="card">
+    <h2><span class="n">4</span>使用量の設定（編集可）</h2>
+    <div class="hint">選択中の「製品シリーズ × 工法」の係数です。仕様書に合わせて書き換えてください。変更は自動保存されます。</div>
+    <details open>
+      <summary>係数テーブルを開く ▾</summary>
+      <table class="coef-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">材料名</th>
+            <th>平場<br>kg/㎡</th>
+            <th>立上り/側溝<br>kg/㎡</th>
+            <th>荷姿<br>kg/缶</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="coefBody"></tbody>
+      </table>
+      <div class="btns">
+        <button class="add" id="addRow">＋ 材料を追加</button>
+        <button class="reset" id="resetCoef">この工法を初期値に戻す</button>
+      </div>
+    </details>
+  </div>
+
+  <footer>
+    <p>※ プライマー・トップコートの荷姿(kg/缶)はメーカー・容量により異なります。実際の缶サイズに合わせて編集してください。</p>
+    <p style="margin-top:6px">出典の目安：<a href="https://tajima.jp/go-jin/" target="_blank" rel="noopener">田島ルーフィング GO-JIN</a> ／ <a href="https://tajima.jp/oltac-ace/" target="_blank" rel="noopener">オルタックエース</a></p>
+    <p style="margin-top:6px">この計算結果は概算です。最終的な発注数量はメーカー仕様書・積算資料でご確認ください。</p>
+  </footer>
+</main>
+
+<script>
+// ===== 既定データ（メーカー公開カタログを参考にした初期値・編集可） =====
+// usage: [平場 kg/㎡, 立上り・側溝 kg/㎡], can: kg/缶
+const DEFAULTS = {
+  "oltac_ace": {
+    label: "オルタックエース（環境対応型ウレタン）",
+    note: "田島ルーフィングの環境対応型ウレタン塗膜防水。平場主材 約2.0kg/㎡が標準目安。荷姿は主材24kg/セット等。",
+    methods: {
+      "mitchaku": {
+        label: "密着工法（X-1）",
+        mats: [
+          {name:"プライマー（OTプライマー）",  usage:[0.20,0.20], can:15},
+          {name:"オルタックエース（ウレタン主材）", usage:[2.00,2.00], can:24},
+          {name:"トップコート（オルタックトップ）", usage:[0.20,0.20], can:8},
+        ]
+      },
+      "tsuki": {
+        label: "通気緩衝工法（絶縁）",
+        mats: [
+          {name:"プライマー（OTプライマー）",  usage:[0.20,0.20], can:15},
+          {name:"通気緩衝シート（オルタックシートGS）※㎡/巻", usage:[1.05,0.00], can:50},
+          {name:"オルタックエース（ウレタン主材）", usage:[2.50,2.00], can:24},
+          {name:"トップコート（オルタックトップ）", usage:[0.20,0.20], can:8},
+        ]
+      }
+    }
+  },
+  "gojin": {
+    label: "GO-JIN（ゴウジン／高靭性・補強布不要）",
+    note: "田島ルーフィングの高靭性・環境対応型ウレタン。補強布不要工法（BCJ-251）。荷姿は主材20kg/セット（主剤8kg＋硬化剤12kg）。",
+    methods: {
+      "mukyo": {
+        label: "補強布不要工法（平場）",
+        mats: [
+          {name:"速硬化OTプライマー",        usage:[0.20,0.20], can:15},
+          {name:"GO-JIN（ウレタン主材 V/T）", usage:[2.40,2.40], can:20},
+          {name:"トップコート（オルタックトップ等）", usage:[0.20,0.20], can:8},
+        ]
+      },
+      "tsuki": {
+        label: "通気緩衝工法",
+        mats: [
+          {name:"速硬化OTプライマー",        usage:[0.20,0.20], can:15},
+          {name:"通気緩衝シート ※㎡/巻",     usage:[1.05,0.00], can:50},
+          {name:"GO-JIN（ウレタン主材 V/T）", usage:[2.40,2.40], can:20},
+          {name:"トップコート（オルタックトップ等）", usage:[0.20,0.20], can:8},
+        ]
+      }
+    }
+  }
+};
+
+const LS_KEY = "urethane_coef_v1";
+let store = loadStore();
+let modes = {hiraba:true, tachiagari:false, sokko:false};
+
+function loadStore(){
+  try{ const s = JSON.parse(localStorage.getItem(LS_KEY)); if(s) return s; }catch(e){}
+  return {};
+}
+function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(store)); }catch(e){} }
+
+// 現在選択の係数（保存済みがあればそれ、無ければDEFAULTSのコピー）
+function curKey(){ return seriesEl.value + "__" + methodEl.value; }
+function curMats(){
+  const k = curKey();
+  if(!store[k]){
+    const def = DEFAULTS[seriesEl.value].methods[methodEl.value].mats;
+    store[k] = JSON.parse(JSON.stringify(def));
+    saveStore();
+  }
+  return store[k];
+}
+
+const seriesEl = document.getElementById('series');
+const methodEl = document.getElementById('method');
+const seriesNote = document.getElementById('seriesNote');
+
+// 製品プルダウン
+for(const [k,v] of Object.entries(DEFAULTS)){
+  const o=document.createElement('option'); o.value=k; o.textContent=v.label; seriesEl.appendChild(o);
+}
+function fillMethods(){
+  methodEl.innerHTML='';
+  for(const [k,v] of Object.entries(DEFAULTS[seriesEl.value].methods)){
+    const o=document.createElement('option'); o.value=k; o.textContent=v.label; methodEl.appendChild(o);
+  }
+  seriesNote.textContent = DEFAULTS[seriesEl.value].note;
+}
+seriesEl.addEventListener('change',()=>{ fillMethods(); renderCoef(); calc(); });
+methodEl.addEventListener('change',()=>{ renderCoef(); calc(); });
+
+// モードトグル
+document.getElementById('modeSeg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const m=b.dataset.mode; modes[m]=!modes[m];
+  // 最低1つは選択
+  if(!modes.hiraba&&!modes.tachiagari&&!modes.sokko){ modes[m]=true; return; }
+  b.classList.toggle('on', modes[m]);
+  document.getElementById('in-'+m).style.display = modes[m]?'block':'none';
+  calc();
+});
+
+['hiraba','tachiagari','sokko','sokkoW','loss'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', calc);
+});
+
+// 係数テーブル描画
+function renderCoef(){
+  const body=document.getElementById('coefBody');
+  body.innerHTML='';
+  const mats=curMats();
+  mats.forEach((m,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML =
+      `<td class="cn"><input value="${escapeHtml(m.name)}" data-i="${i}" data-f="name"></td>`+
+      `<td><input type="number" inputmode="decimal" step="0.01" min="0" value="${m.usage[0]}" data-i="${i}" data-f="u0"></td>`+
+      `<td><input type="number" inputmode="decimal" step="0.01" min="0" value="${m.usage[1]}" data-i="${i}" data-f="u1"></td>`+
+      `<td><input type="number" inputmode="decimal" step="0.1" min="0.1" value="${m.can}" data-i="${i}" data-f="can"></td>`+
+      `<td><button class="del" data-i="${i}" title="削除">×</button></td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',onCoefEdit));
+  body.querySelectorAll('.del').forEach(b=>b.addEventListener('click',e=>{
+    curMats().splice(+e.target.dataset.i,1); saveStore(); renderCoef(); calc();
+  }));
+}
+function onCoefEdit(e){
+  const i=+e.target.dataset.i, f=e.target.dataset.f, mats=curMats();
+  if(f==='name') mats[i].name=e.target.value;
+  else if(f==='u0') mats[i].usage[0]=parseFloat(e.target.value)||0;
+  else if(f==='u1') mats[i].usage[1]=parseFloat(e.target.value)||0;
+  else if(f==='can') mats[i].can=parseFloat(e.target.value)||1;
+  saveStore(); calc();
+}
+document.getElementById('addRow').addEventListener('click',()=>{
+  curMats().push({name:"新規材料", usage:[0,0], can:16}); saveStore(); renderCoef(); calc();
+});
+document.getElementById('resetCoef').addEventListener('click',()=>{
+  if(!confirm('この工法の係数を初期値に戻します。よろしいですか？')) return;
+  delete store[curKey()]; saveStore(); renderCoef(); calc();
+});
+
+// 計算
+function calc(){
+  const loss = 1 + (parseFloat(document.getElementById('loss').value)||0)/100;
+  const hiraba = modes.hiraba ? (parseFloat(document.getElementById('hiraba').value)||0) : 0;
+  const tachi  = modes.tachiagari ? (parseFloat(document.getElementById('tachiagari').value)||0) : 0;
+  const sLen   = modes.sokko ? (parseFloat(document.getElementById('sokko').value)||0) : 0;
+  const sW     = parseFloat(document.getElementById('sokkoW').value)||0;
+  const sokkoArea = sLen * sW;
+  const areaFlat = hiraba;                 // 平場係数を使う面積
+  const areaVert = tachi + sokkoArea;      // 立上り/側溝係数を使う面積
+
+  const mats=curMats();
+  let rows='', totalCans=0, totalKg=0, mainCans=0, mainName='';
+  mats.forEach(m=>{
+    const kg = (areaFlat*m.usage[0] + areaVert*m.usage[1]) * loss;
+    const cans = kg>0 ? Math.ceil(kg/m.can) : 0;
+    const leftover = cans>0 ? (cans*m.can - kg) : 0;
+    totalCans += cans; totalKg += kg;
+    // 主材（最も使用量が多い液体材料）をハイライト用に記録
+    if(m.usage[0]+m.usage[1] > 0 && cans>=mainCans && /ウレタン|主材|GO-JIN|オルタックエース/.test(m.name)){
+      mainCans=cans; mainName=m.name;
+    }
+    rows += `<tr>
+      <td class="mat">${escapeHtml(m.name)}</td>
+      <td>${kg>0?kg.toFixed(1):'—'}</td>
+      <td>${m.can}</td>
+      <td class="cans">${cans>0?cans:'—'}</td>
+      <td>${cans>0?leftover.toFixed(1):'—'}</td>
+    </tr>`;
+  });
+
+  document.getElementById('result').innerHTML = `
+    <table>
+      <thead><tr>
+        <th class="mat">材料</th><th>必要量<br>kg</th><th>荷姿<br>kg/缶</th><th>必要<br>缶数</th><th>余り<br>kg</th>
+      </tr></thead>
+      <tbody>${rows}
+        <tr class="tot"><td class="mat">合計</td><td>${totalKg.toFixed(1)}</td><td></td><td class="cans">${totalCans}</td><td></td></tr>
+      </tbody>
+    </table>`;
+
+  document.getElementById('bigcans').innerHTML = `
+    <div class="b"><div class="lab">合計缶数</div><div class="v">${totalCans}<small> 缶</small></div></div>
+    <div class="b"><div class="lab">主材 ${mainName?('（'+shorten(mainName)+'）'):''}</div><div class="v">${mainCans}<small> 缶</small></div></div>`;
+
+  const parts=[];
+  if(areaFlat>0) parts.push(`平場 ${areaFlat.toFixed(1)}㎡`);
+  if(tachi>0) parts.push(`立上り ${tachi.toFixed(1)}㎡`);
+  if(sokkoArea>0) parts.push(`側溝 ${sLen.toFixed(1)}m×${sW}m＝${sokkoArea.toFixed(1)}㎡`);
+  document.getElementById('areaNote').textContent =
+    (parts.length? '対象：'+parts.join('／')+`　（ロス率 ${document.getElementById('loss').value||0}％込み）` : '面積を入力してください。');
+}
+
+function shorten(s){ return s.replace(/（.*$/,'').slice(0,12); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// 初期化
+fillMethods();
+renderCoef();
+calc();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "urethane-bousui-calc",
+  "version": "1.0.0",
+  "description": "田島ルーフィング GO-JIN／オルタックシリーズ ウレタン防水 缶数計算ツール（単体HTML・API不要・オフライン可）",
+  "private": true,
+  "engines": { "node": ">=20" }
+}
