@@ -35,7 +35,7 @@ Webで公開する場合は **GitHub Pages** が簡単です：
 1. このPRを `main` にマージ
 2. リポジトリの **Settings → Pages** を開く
 3. Source を「**Deploy from a branch**」、Branch を「**main**」／フォルダ「**/docs**」に設定して Save
-4. 数分後、公開URL **https://kkei1103-cpu.github.io/kids-news/** で表示されます
+4. 数分後、公開URL **https://kkei1103-cpu.github.io/bousui-calc/** で表示されます
 
 `docs/` フォルダを任意の静的ホスティング（Netlify／社内サーバー等）に置いても動きます。
 
